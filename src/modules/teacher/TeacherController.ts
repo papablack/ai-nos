@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import { createCanvas, CanvasRenderingContext2D } from 'node-canvas';
 import DataType from '../../interfaces/DataType';
 import { Dataset } from '@tensorflow/tfjs-data';
+import config from '../../config/paths';
 
 const startTrainingImages = async () => {
     const width = 100;
@@ -63,9 +64,9 @@ const startTrainingImages = async () => {
         const data = new Uint8ClampedArray(output.flatMap(arr => arr.flat()));
         imageData.data.set(data);
 
-        ctx.putImageData(imageData, 0, 0);
+        ctx.putImageData(imageData, 0, 0);    
 
-        const out = fs.createWriteStream(`output${i}.png`);
+        const out = fs.createWriteStream(config.generatedDir + `/output${i}.png`);
         const stream = canvas.createPNGStream();
         stream.pipe(out);
         out.on('finish', () => console.log(`Image ${i} created.`));
