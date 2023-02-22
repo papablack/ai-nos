@@ -1,0 +1,70 @@
+version: '3'
+
+# Start with a clean checkout of the app but with a local.ini that has at least this:
+# [nginx]
+# target: docker
+# [uwsgi]
+# useSyslog: false
+# [redis]
+# host: redis_dev_junction
+# since this is how it is mapped in the network by default (as named below).
+# If not using SSL then use these settings:
+# [global]
+# useSSL: false
+# [nginx]
+# useSSL: false
+# target: dockernossl
+# [uwsgi]
+# useSyslog: false
+# [redis]
+# host: redis_dev_junction
+# Run docker-compose build from the docker directory.
+# This relies on the rootVarDir value NOT being overwritten in edrnaConfig.ini[global].
+# The build step is necessary on every change to the required python and bower modules.
+# Then run docker-compose up -d which runs the containers and will mount the local app 
+# directory so that changes can be reflected in the code running in the containers.
+# Note 
+# %> docker exec -it docker_uwsgi_dev_junction_1 bash -c "venv/bin/pymk /generate/nginxconf"
+# %> docker exec -it docker_nginx_devjunction_1 bash -c "cp /var/junctioned/nginx/nginx.conf /etc/nginx/conf.d/default.conf && nginx -s reload"
+# Note that there is a watcher on the sass changes that could be started (sass:watch)). You can also run the task:
+# %> docker exec -it docker_junction_uwsgi_1 bash -c "cd frontend && ./node_modules/.bin/grunt sass"
+# Note that there is a watcher that could be started on the python (and local.ini) changes. Drawback here is that
+# syntax errors might crash the uwsgi server.
+# App runs on localhost:80 so beware if you have a local http server running already
+
+services:
+  nginx_dev_nosai:
+    build: nginx
+    env_file:
+      - ./.env
+    environment:
+      COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
+    dns:
+      - 8.8.8.8
+    ports:
+      - ${HTTP_EXT_PORT}:${HTTP_INT_PORT}
+      - ${HTTPS_EXT_PORT}:${HTTPS_INT_PORT}     
+    links:
+      - uwsgi_dev_junction
+    volumes:
+      - ../:/app
+      - junction_dev_junctioned:/var/junctioned
+
+  redis_dev_nosai:
+    image: redis:alpine
+    env_file:
+      - ./.env
+    environment:
+      REDIS_REPLICATION_MODE: master
+      COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
+   
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning  
+    ports:
+      - '${REDIS_EXT_PORT}:${REDIS_INT_PORT}'
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+
+volumes:
+  main_dev_nosai: ~
+
