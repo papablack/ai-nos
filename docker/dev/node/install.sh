@@ -2,6 +2,7 @@
 
 echo "Replacing env vars in nginx config files for domains: ${DOMAINS}"
 sed -i "s|\[DOMAINS\]|$DOMAINS|g" /etc/nginx/conf.d/default.conf
+sed -i "s|\[PUBDIR\]|$PUBDIR|g" /etc/nginx/conf.d/default.conf
 sed -i "s|\[HTTP_EXT_PORT\]|$HTTP_EXT_PORT|g" /etc/nginx/conf.d/default.conf
 sed -i "s|\[HTTPS_EXT_PORT\]|$HTTPS_EXT_PORT|g" /etc/nginx/conf.d/default.conf
 

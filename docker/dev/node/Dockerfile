@@ -1,6 +1,6 @@
 FROM nginx:latest
 
-RUN sudo apt-get install -y \
+RUN apt-get update && apt-get install -y \
     libpango1.0-dev \
     libcairo2-dev \
     libjpeg-dev \
@@ -11,6 +11,8 @@ RUN sudo apt-get install -y \
     libgif-dev;
 
 COPY sites/default.conf /etc/nginx/conf.d/
+
+RUN chmod -R 777 /app
 
 RUN mkdir /var/.startup
 COPY install.sh /var/.startup/install.sh
@@ -33,4 +35,6 @@ RUN npm --version
 
 RUN npm install yarn -g
 
-WORKDIR /var/www/lingro
+WORKDIR /app
+
+ENTRYPOINT [ "entrypoint.sh" ]

@@ -33,8 +33,8 @@ version: '3'
 # App runs on localhost:80 so beware if you have a local http server running already
 
 services:
-  nginx_dev_nosai:
-    build: nginx
+  node_dev_nosai:
+    build: node
     env_file:
       - ./.env
     environment:
@@ -47,8 +47,9 @@ services:
     links:
       - uwsgi_dev_junction
     volumes:
-      - ../:/app
-      - junction_dev_junctioned:/var/junctioned
+      - ../:${WORKDIR}
+      - main_dev_nosai:/var/appdata
+      - keys_dev_nosai:/var/keyz
 
   redis_dev_nosai:
     image: redis:alpine
@@ -67,4 +68,5 @@ services:
 
 volumes:
   main_dev_nosai: ~
+  keys_dev_nosai: ~
 
