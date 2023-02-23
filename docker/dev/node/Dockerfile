@@ -3,8 +3,7 @@ FROM nginx:latest
 RUN apt-get update && apt-get install -y \
     libpango1.0-dev \
     libcairo2-dev \
-    libjpeg-dev \
-    libjpeg8-dev \
+    libjpeg-dev \    
     libgif-dev \ 
     build-essential \
     g++ \
@@ -12,11 +11,10 @@ RUN apt-get update && apt-get install -y \
 
 COPY sites/default.conf /etc/nginx/conf.d/
 
-RUN chmod -R 777 /app
-
 RUN mkdir /var/.startup
 COPY install.sh /var/.startup/install.sh
 RUN sh /var/.startup/install.sh
+COPY install.sh /var/.startup/install.sh
 
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
 
@@ -37,4 +35,8 @@ RUN npm install yarn -g
 
 WORKDIR /app
 
-ENTRYPOINT [ "entrypoint.sh" ]
+COPY ./entrypoint.sh /var/.startup/entrypoint.sh
+RUN dos2unix /var/.startup/entrypoint.sh
+RUN ["chmod", "+x", "/var/.startup/entrypoint.sh"]
+
+ENTRYPOINT [ "/var/.startup/entrypoint.sh" ]
