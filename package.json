@@ -6,30 +6,31 @@
     "license": "Apache-2.0",
     "private": true,
     "engines": {
-      "node": ">=8.11.0"
+        "node": ">=8.11.0"
     },
-    "dependencies": {      
-      "@tensorflow/tfjs-node": "^4.2.0",
-      "node-canvas": "Rush/node-canvas#v2.9.0-patched",
-      "@types/dotenv": "^8.2.0",
-      "@types/argparse": "^1.0.35",
-      "argparse": "^1.0.10",
-      "fs": "0.0.1-security"
+    "dependencies": {
+        "@tensorflow/tfjs-node": "^4.2.0",
+        "@types/argparse": "^1.0.35",
+        "@types/dotenv": "^8.2.0",
+        "argparse": "^1.0.10",
+        "fs": "0.0.1-security",
+        "node-canvas": "Rush/node-canvas#v2.9.0-patched",
+        "pngjs": "^7.0.0",
+        "typescript": "^4.9.5"
     },
     "devDependencies": {
-      "clang-format": "~1.2.2",
-      "@types/chai": "^4.1.7",
-      "@types/mocha": "^5.2.6",
-      "chai": "^4.2.0",
-      "mocha": "^5.2.0",
-      "nyc": "^13.3.0",
-      "ts-node": "^8.0.2",      
-      "tslint": "^5.12.1",
-      "typescript": "^3.3.3"
+        "@types/chai": "^4.1.7",
+        "@types/mocha": "^5.2.6",
+        "chai": "^4.2.0",
+        "clang-format": "~1.2.2",
+        "mocha": "^5.2.0",
+        "nyc": "^13.3.0",
+        "ts-node": "^8.0.2",
+        "tslint": "^5.12.1"
     },
     "scripts": {
         "watch": "tsc --watch",
         "start": "node dist/index.js",
         "build": "tsc"
     }
-  }
+}
